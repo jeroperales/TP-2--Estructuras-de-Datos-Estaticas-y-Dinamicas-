@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+//HOLA
 typedef struct
 {
     char nombre[30];
@@ -196,3 +197,5 @@ int posicionMenor (persona arreglo[], int posIni, int validos)
     }
     return posMenor;
 }
+
+

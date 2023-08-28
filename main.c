@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-//HOLA
+
 typedef struct
 {
     char nombre[30];
@@ -10,9 +10,10 @@ typedef struct
     int edad;
 } persona;
 
-typedef struct{
-     int valores[100];
-     int posTope; //posición de nuevo tope, lugar en donde se almacenará el nuevo valor
+typedef struct
+{
+    int valores[100];
+    int posTope; //posición de nuevo tope, lugar en donde se almacenará el nuevo valor
 } Pila;
 
 persona cargarPersona();
@@ -24,9 +25,18 @@ void mostrarArreglo (persona arreglo[], int validos);
 void ordenarArreglo(persona arreglo[], int validos);
 int posicionMenor (persona arreglo[], int posIni, int validos);
 
+void inicPila(Pila* p);
+void apilar(Pila * p, int valor);
+void mostrar(Pila * p);
+void cargarPila (Pila * p);
+int desapilar(Pila* p);
+int tope(Pila * p);
+int pilavacia(Pila * p);
+void leer(Pila* p);
+
 int main()
 {
-
+    /*
     persona arreglo[30];
     char genero;
 
@@ -53,12 +63,25 @@ int main()
     ordenarArreglo(arreglo, validos);
     mostrarArreglo(arreglo, validos);
 
+    */
 
+    ///PUNTO 3
+    int prueba;
 
+    Pila pilita;
+    Pila pilita2;
+    Pila pilita3;
+    inicPila(&pilita);
+    inicPila(&pilita2);
+    inicPila(&pilita3);
 
+    printf("CARGAR PILA 1: \n");
+    cargarPila(&pilita);
 
+    printf("CARGAR PILA 2: \n");
+    cargarPila(&pilita2);
 
-
+    intercaPila(&pilita, &pilita2, &pilita3);
 
 }
 
@@ -198,4 +221,119 @@ int posicionMenor (persona arreglo[], int posIni, int validos)
     return posMenor;
 }
 
+///FUNCIONES PILAS
+void inicPila(Pila* p)
+{
+    p->posTope = 0;
+}
 
+void apilar(Pila * p, int valor)
+{
+    if(p->posTope <=100)
+    {
+        p->valores[p->posTope] = valor;
+        p->posTope++;
+    }
+    else
+    {
+        printf("\nLA PILA ESTA LLENA\n");
+    }
+}
+
+void mostrar(Pila* p)
+{
+    int i = 0;
+    printf ("\nBASE...                                                            ...TOPE\n");
+    printf ("==========================================================================\n");
+    while (i<p->posTope)
+    {
+        printf("|  %i  |", p->valores[i]);
+        i++;
+    }
+    printf ("\n==========================================================================\n");
+}
+
+void leer(Pila* p)
+{
+    int valor;
+    printf ("\nIngrese el valor de un numero entero \n");
+    fflush(stdin);
+    scanf("%i", &valor);
+
+    apilar(p, valor);
+
+}
+
+void cargarPila (Pila * p)
+{
+    char opcion ='s';
+    while (opcion =='s')
+    {
+        leer(p);
+        printf("\nSI DESEA CONTINUAR, INGRESE ' s ' \n");
+        fflush(stdin);
+        scanf("%c", &opcion);
+    }
+}
+
+int tope(Pila * p)
+{
+    return p->valores[p->posTope-1];
+}
+
+int pilavacia(Pila * p)
+{
+    if(p->posTope == 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int desapilar(Pila* p)
+{
+    int pos = p->posTope - 1;
+    int valor = p->valores[pos];
+    if(p->posTope > 0)
+    {
+        p->posTope = p->posTope-1;
+    }
+    else
+    {
+        printf("\nLA PILA ESTA VACIA\n");
+    }
+    return valor;
+}
+
+void pilaApila (Pila* p1, Pila* p2)
+{
+    while(!pilavacia(p1))
+    {
+        apilar(p2, desapilar(p1));
+    }
+    printf("\nPILITA \n");
+    mostrar(p1);
+    printf("\nPILITA2 \n");
+    mostrar(p2);
+}
+
+void intercaPila (Pila *p1, Pila *p2, Pila *p3)
+{
+
+    while (!pilavacia(p1)||!pilavacia(p2))
+    {
+        if(!pilavacia(p1))
+        {
+            apilar(p3,desapilar (p1));
+        }
+        if(!pilavacia(p2))
+        {
+            apilar(p3,desapilar (p2));
+        }
+    }
+    printf("PILA NUMERO 3: \n");
+    mostrar(p3);
+}

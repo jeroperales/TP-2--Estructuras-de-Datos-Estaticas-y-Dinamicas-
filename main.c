@@ -24,6 +24,7 @@ int cantidadGenero(persona arreglo[], int validos, char genero);
 void mostrarArreglo (persona arreglo[], int validos);
 void ordenarArreglo(persona arreglo[], int validos);
 int posicionMenor (persona arreglo[], int posIni, int validos);
+void eliminaNumero(int arreglo[], int numAEliminar);
 
 void inicPila(Pila* p);
 void apilar(Pila * p, int valor);
@@ -36,53 +37,83 @@ void leer(Pila* p);
 
 int main()
 {
-    /*
+
     persona arreglo[30];
+    int arregloINT[30];
     char genero;
-
-
     int validos = cargarArreglo(arreglo, 30);
-
-    printf("\nIngresa el genero a filtrar: ");
-    fflush(stdin);
-    scanf("%c", &genero);
-
-    int cantGenero = cantidadGenero(arreglo, validos, genero);
-
-    printf("La cantidad de ese genero es: %d", cantGenero);
-
-    persona* arregloGenero = crearArreglo(validos);
-
-    printf ("\n----------ARREGLO FILTRADO----------");
-    cargarArregloGenero(arreglo, arregloGenero, validos, genero);
-    mostrarArreglo(arregloGenero, cantGenero);
-
-
-    //PUNTO 2
-    printf ("\n----------ARREGLO ORDENADO----------\n");
-    ordenarArreglo(arreglo, validos);
-    mostrarArreglo(arreglo, validos);
-
-    */
-
-    ///PUNTO 3
-    int prueba;
-
+    int choice;
+    int cantGenero;
     Pila pilita;
     Pila pilita2;
     Pila pilita3;
-    inicPila(&pilita);
-    inicPila(&pilita2);
-    inicPila(&pilita3);
 
-    printf("CARGAR PILA 1: \n");
-    cargarPila(&pilita);
+    printf("\nMENU:\n");
+    printf("1. Filtrar por genero\n");
+    printf("2. Ordenar el arreglo\n");
+    printf("3. Cargar Pilas y realizar intercambio\n");
+    printf("4. Realizar insercion\n");
+    printf("5. Salir\n");
 
-    printf("CARGAR PILA 2: \n");
-    cargarPila(&pilita2);
+    printf("Seleccione una opcion: ");
+    scanf("%d", &choice);
 
-    intercaPila(&pilita, &pilita2, &pilita3);
+    switch (choice) {
+        case 1: // Filtrar por genero
+            printf("\nIngresa el genero a filtrar: ");
+            fflush(stdin);
+            scanf(" %c", &genero);
+            cantGenero = cantidadGenero(arreglo, validos, genero);
+            printf("La cantidad de ese genero es: %d\n", cantGenero);
+            persona* arregloGenero = crearArreglo(validos);
+            printf("\n----------ARREGLO FILTRADO----------\n");
+            cargarArregloGenero(arreglo, arregloGenero, validos, genero);
+            mostrarArreglo(arregloGenero, cantGenero);
+            break;
 
+        case 2: // Ordenar el arreglo
+            printf("\n----------ARREGLO ORDENADO----------\n");
+            ordenarArreglo(arreglo, validos);
+            mostrarArreglo(arreglo, validos);
+            break;
+
+        case 3: // Cargar Pilas y realizar intercambio
+
+            inicPila(&pilita);
+            inicPila(&pilita2);
+            inicPila(&pilita3);
+
+            printf("CARGAR PILA 1: \n");
+            cargarPila(&pilita);
+
+            printf("CARGAR PILA 2: \n");
+            cargarPila(&pilita2);
+
+            // Realizar intercambio
+            printf("\nRealizando intercambio de pilas...\n");
+            intercaPila(&pilita, &pilita2, &pilita3);
+            break;
+
+        case 4: // Realizar insercion
+            validos = cargarArr(arregloINT, 30);
+            printf("ARREGLO SIN ORDENAR....\n");
+            mostrarArregloINT(arregloINT, validos);
+            printf("\nARREGLO ORDENADO....\n");
+            insercion(arregloINT, validos);
+            mostrarArregloINT(arregloINT, validos);
+
+            break;
+
+        case 5: //Función eliminar un elemento de un arreglo.
+
+            break;
+
+        default:
+            printf("Opcion no valida. Por favor, seleccione una opcion valida.\n");
+            break;
+    }
+
+    return 0;
 }
 
 persona cargarPersona()
@@ -308,6 +339,32 @@ int desapilar(Pila* p)
     return valor;
 }
 
+void insercion (int arreglo[], int validos)
+{
+
+    int indiceActual = 0;
+    while(indiceActual < validos-1)
+    {
+
+        insertarDato(arreglo, indiceActual, arreglo[indiceActual+1]);
+        indiceActual++;
+
+    }
+}
+
+void insertarDato(int arreglo[], int inicioBusqueda, int dato)
+{
+    int i = inicioBusqueda;
+    while(i >= 0 && dato < arreglo[i])
+    {
+
+        arreglo[i+1] = arreglo[i];
+        i--;
+
+    }
+    arreglo[i+1] = dato;
+}
+
 void pilaApila (Pila* p1, Pila* p2)
 {
     while(!pilavacia(p1))
@@ -337,3 +394,37 @@ void intercaPila (Pila *p1, Pila *p2, Pila *p3)
     printf("PILA NUMERO 3: \n");
     mostrar(p3);
 }
+
+int cargarArr(int arreglo[],int dim)
+{
+    int i=0;
+    char op = 's';
+    while (op=='s')
+    {
+        printf("Ingrese el valor que quiera en el arreglo\n");
+        fflush(stdin);
+        scanf("%i",&arreglo[i]);
+
+        i++;
+
+        printf("Si desea continuar ingrese s\n");
+        fflush(stdin);
+        scanf("%c",&op);
+    }
+
+
+    return i;
+}
+
+void mostrarArregloINT (int arreglo[], int validos)
+{
+
+    for(int i = 0; i < validos; i++)
+    {
+
+        printf("|%d |", arreglo[i]);
+
+    }
+}
+
+

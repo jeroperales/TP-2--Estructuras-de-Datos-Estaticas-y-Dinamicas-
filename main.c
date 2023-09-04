@@ -89,6 +89,7 @@ int main()
     switch (choice)
     {
     case 1: // Filtrar por genero
+        validos = cargarArreglo(arreglo, 30);
         printf("\nIngresa el genero a filtrar: ");
         fflush(stdin);
         scanf(" %c", &genero);
@@ -101,6 +102,7 @@ int main()
         break;
 
     case 2: // Ordenar el arreglo
+        validos = cargarArreglo(arreglo, 30);
         printf("\n----------ARREGLO ORDENADO----------\n");
         ordenarArreglo(arreglo, validos);
         mostrarArreglo(arreglo, validos);

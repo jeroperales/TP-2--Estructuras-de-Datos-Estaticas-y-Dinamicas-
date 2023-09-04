@@ -13,8 +13,28 @@ typedef struct
 typedef struct
 {
     int valores[100];
-    int posTope; //posición de nuevo tope, lugar en donde se almacenará el nuevo valor
+    int posTope; //posiciï¿½n de nuevo tope, lugar en donde se almacenarï¿½ el nuevo valor
 } Pila;
+
+typedef struct
+{
+    int matricula;
+    char nombre[30];
+} Alumno;
+
+typedef struct
+{
+    int codigo;
+    char nombreMat[20];
+} Materia ;
+
+typedef struct
+{
+    int matricula;
+    int codigo;
+    int nota;
+} Nota;
+
 
 persona cargarPersona();
 persona* crearArreglo(int validos);
@@ -25,6 +45,10 @@ void mostrarArreglo (persona arreglo[], int validos);
 void ordenarArreglo(persona arreglo[], int validos);
 int posicionMenor (persona arreglo[], int posIni, int validos);
 void eliminaNumero(int arreglo[], int numAEliminar);
+int eliminarDato(int arreglo[], int validos, int pos);
+void cargarMaterias(Materia arrMateria[]);
+Alumno cargaAlumno();
+int cargarArregloAlumno(Alumno alus[], int dim);
 
 void inicPila(Pila* p);
 void apilar(Pila * p, int valor);
@@ -41,9 +65,13 @@ int main()
     persona arreglo[30];
     int arregloINT[30];
     char genero;
-    int validos = cargarArreglo(arreglo, 30);
+    int validos; //= cargarArreglo(arreglo, 30);
     int choice;
     int cantGenero;
+    int dato;
+    Alumno alus[20]; // para almacenar los datos de los 20 alumnos.
+    Materia mats[5]; // para almacenar los cÃ³digos y nombres de las 5 materias.
+    Nota notas[100]; // para almacenar todas las notas de los alumnos.
     Pila pilita;
     Pila pilita2;
     Pila pilita3;
@@ -58,59 +86,67 @@ int main()
     printf("Seleccione una opcion: ");
     scanf("%d", &choice);
 
-    switch (choice) {
-        case 1: // Filtrar por genero
-            printf("\nIngresa el genero a filtrar: ");
-            fflush(stdin);
-            scanf(" %c", &genero);
-            cantGenero = cantidadGenero(arreglo, validos, genero);
-            printf("La cantidad de ese genero es: %d\n", cantGenero);
-            persona* arregloGenero = crearArreglo(validos);
-            printf("\n----------ARREGLO FILTRADO----------\n");
-            cargarArregloGenero(arreglo, arregloGenero, validos, genero);
-            mostrarArreglo(arregloGenero, cantGenero);
-            break;
+    switch (choice)
+    {
+    case 1: // Filtrar por genero
+        printf("\nIngresa el genero a filtrar: ");
+        fflush(stdin);
+        scanf(" %c", &genero);
+        cantGenero = cantidadGenero(arreglo, validos, genero);
+        printf("La cantidad de ese genero es: %d\n", cantGenero);
+        persona* arregloGenero = crearArreglo(validos);
+        printf("\n----------ARREGLO FILTRADO----------\n");
+        cargarArregloGenero(arreglo, arregloGenero, validos, genero);
+        mostrarArreglo(arregloGenero, cantGenero);
+        break;
 
-        case 2: // Ordenar el arreglo
-            printf("\n----------ARREGLO ORDENADO----------\n");
-            ordenarArreglo(arreglo, validos);
-            mostrarArreglo(arreglo, validos);
-            break;
+    case 2: // Ordenar el arreglo
+        printf("\n----------ARREGLO ORDENADO----------\n");
+        ordenarArreglo(arreglo, validos);
+        mostrarArreglo(arreglo, validos);
+        break;
 
-        case 3: // Cargar Pilas y realizar intercambio
+    case 3: // Cargar Pilas y realizar intercambio
 
-            inicPila(&pilita);
-            inicPila(&pilita2);
-            inicPila(&pilita3);
+        inicPila(&pilita);
+        inicPila(&pilita2);
+        inicPila(&pilita3);
 
-            printf("CARGAR PILA 1: \n");
-            cargarPila(&pilita);
+        printf("CARGAR PILA 1: \n");
+        cargarPila(&pilita);
 
-            printf("CARGAR PILA 2: \n");
-            cargarPila(&pilita2);
+        printf("CARGAR PILA 2: \n");
+        cargarPila(&pilita2);
 
-            // Realizar intercambio
-            printf("\nRealizando intercambio de pilas...\n");
-            intercaPila(&pilita, &pilita2, &pilita3);
-            break;
+        // Realizar intercambio
+        printf("\nRealizando intercambio de pilas...\n");
+        intercaPila(&pilita, &pilita2, &pilita3);
+        break;
 
-        case 4: // Realizar insercion
-            validos = cargarArr(arregloINT, 30);
-            printf("ARREGLO SIN ORDENAR....\n");
-            mostrarArregloINT(arregloINT, validos);
-            printf("\nARREGLO ORDENADO....\n");
-            insercion(arregloINT, validos);
-            mostrarArregloINT(arregloINT, validos);
+    case 4: // Realizar insercion y ordenamiento
+        validos = cargarArr(arregloINT, 30);
+        printf("ARREGLO SIN ORDENAR....\n");
+        mostrarArregloINT(arregloINT, validos);
+        printf("\nARREGLO ORDENADO....\n");
+        insercion(arregloINT, validos);
+        mostrarArregloINT(arregloINT, validos);
 
-            break;
+        break;
 
-        case 5: //Función eliminar un elemento de un arreglo.
+    case 5: //Funcion eliminar un elemento de un arreglo.
+        validos = cargarArr(arregloINT, 30);
+        printf("\nArreglo: \n");
+        mostrarArregloINT(arregloINT, validos);
+        printf("\nElija posicion a eliminar.\n");
+        fflush(stdin);
+        scanf("%d", &dato);
+        validos = eliminarDato(arregloINT, validos, dato);
+        mostrarArregloINT(arregloINT, validos);
+        break;
 
-            break;
-
-        default:
-            printf("Opcion no valida. Por favor, seleccione una opcion valida.\n");
-            break;
+    default:
+        printf("Opcion no valida. Por favor, seleccione una opcion valida.\n");
+        break;
     }
 
     return 0;
@@ -425,6 +461,117 @@ void mostrarArregloINT (int arreglo[], int validos)
         printf("|%d |", arreglo[i]);
 
     }
+}
+
+int eliminarDato(int arreglo[], int validos, int pos)
+{
+    if(validos != pos+1)
+    {
+        eliminarDato(arreglo, validos-1, pos);
+    }
+    arreglo[validos-1] = arreglo[validos];
+    return validos-1;
+}
+
+
+
+//NO SE SABE SI FUNCIONA:
+
+void cargarMaterias(Materia arrMateria[])
+{
+
+    arrMateria[0].nombreMat[0] = "Matematica";
+    arrMateria[0].codigo = 1;
+    arrMateria[1].nombreMat[0] = "Ingles";
+    arrMateria[1].codigo = 2;
+    arrMateria[2].nombreMat[0] = "Programacion";
+    arrMateria[2].codigo = 3;
+    arrMateria[3].nombreMat[0] = "Laboratorio";
+    arrMateria[3].codigo = 4;
+    arrMateria[4].nombreMat[0] = "Fisica";
+    arrMateria[4].codigo = 5;
+}
+
+Alumno cargaAlumno()
+{
+    Alumno alumno;
+
+    printf ("\nINGRESE NOMBRE DEL ALUMNO \n");
+    fflush(stdin);
+    gets(alumno.nombre);
+
+    printf("\nINGRESE LA MATRICULA DEL ALUMNO \n");
+    fflush (stdin);
+    scanf("%i", &alumno.matricula);
+}
+
+int cargarArregloAlumno(Alumno alus[], int dim)
+{
+    Alumno alumnito;
+    int i = 0;
+    char opc = 's';
+
+    while (i<dim || opc == 's')
+    {
+        alus[i]= cargaAlumno ();
+        printf("SI DESEA CONTINUAR PRESIONE 's' \n");
+        fflush(stdin);
+        scanf("%c", &opc);
+        i++;
+
+    }
+    return i;
+}
+
+int verificacion(int matricula, int codigo, Alumno arregloAlumno[], int validos)
+{
+    int i = 0;
+    int flag = 0;
+
+    while ((i<validos) && (flag == 0))
+    {
+        if ((matricula == arregloAlumno[i].matricula) && ((codigo<=5 && codigo>0)))
+        {
+            flag = 1;
+        }
+        else
+        {
+            i++;
+        }
+    }
+    return flag;
+}
+
+int cargarNota(Nota listaNotas[], Alumno arregloAlumno[], int validosAlumno, int i)
+{
+    int matricula;
+    int codigo;
+    int flag = 0;
+
+    printf("INGRESE MATRICULA DEL ALUMNO \n");
+    fflush(stdin);
+    scanf("%i", &matricula);
+
+    printf("INGRESE CODIGO DE MATERIA A CARGAR\n");
+    fflush(stdin);
+    scanf("%i", &codigo);
+
+    if (verificacion(matricula, codigo, arregloAlumno, validosAlumno) == 1)
+    {
+        listaNotas[i].matricula = matricula;
+        listaNotas[i].codigo = codigo;
+
+        printf("INGRESE LA NOTA DEL ALUMNO \n");
+        fflush(stdin);
+        scanf("%i", &listaNotas[i].nota);
+        flag = 1;
+    }
+    else
+    {
+        printf("EL CODIGO O LA MATRICULA ES INVALIDA\n");
+        flag = 0;
+    }
+    return flag;
 }
 
 
